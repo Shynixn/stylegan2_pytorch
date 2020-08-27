@@ -45,7 +45,7 @@ class LPIPS_VGG16(nn.Module):
             idx_range = range(self._FEATURE_IDX[i - 1], self._FEATURE_IDX[i])
             self.slices.append(nn.Sequential(*[features[j] for j in idx_range]))
         self.linear_layers = nn.ModuleList()
-        for weight in torch.utils.model_zoo.load_url(self._LINEAR_WEIGHTS_URL).values():
+        for weight in torch.utils.model_zoo.load_url(self._LINEAR_WEIGHTS_URL, map_location=torch.device('cpu')).values():
             weight = weight.view(1, -1)
             linear = nn.Linear(weight.size(1), 1, bias=False)
             linear.weight.data.copy_(weight)
